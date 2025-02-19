@@ -38,10 +38,11 @@ public class Record implements Serializable{
 
     @Nonnull
     private Long departmentId;
-
+    
+    @Nonnull
     private Integer recordType; // 0-INCOME // 1-ONE_TIME // 2-RECURRING
 
-    private Integer recurringType; // 0-FIXED // 1-INSTALLMENT
+    private Integer recurringType; //0-N/A //1-Fixed // 2-Installment
 
     private Integer recurringCount;
     

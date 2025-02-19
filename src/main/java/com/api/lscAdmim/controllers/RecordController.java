@@ -1,10 +1,12 @@
 package com.api.lscAdmim.controllers;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.lscAdmim.dtos.RecordDTO;
+import com.api.lscAdmim.services.ExcelService;
 import com.api.lscAdmim.services.RecordService;
 
 @RestController
@@ -23,10 +26,12 @@ import com.api.lscAdmim.services.RecordService;
 public class RecordController {
 
     private final RecordService recordService;
+    private final ExcelService excelService;
 
     @Autowired
-    public RecordController(RecordService recordService) {
+    public RecordController(RecordService recordService, ExcelService excelService) {
         this.recordService = recordService;
+        this.excelService = excelService;
     }
     
     
@@ -61,6 +66,14 @@ public class RecordController {
     	
     	return ResponseEntity.ok(recordService.getRecordsInRange(dtInit, dtEnd));
     	
+    }
+    
+    @PostMapping(value = "/excel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> exportExcel(@RequestBody List<RecordDTO> records) throws IOException{
+    	return ResponseEntity.ok()
+    			.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=records.xlsx")
+    			.contentType(MediaType.APPLICATION_OCTET_STREAM)
+    			.body(excelService.generateExcel(records));
     }
 
 }
