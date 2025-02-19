@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Long> {
 	
-	public List<Record> findByDateBetweenAndRecordTypeGreaterThan(LocalDate dtStart, LocalDate dtEnd, Integer recordType);
+	public List<Record> findByDateBetweenAndStatusOrderByDate(LocalDate dtStart, LocalDate dtEnd, Integer status);
 	
+	public List<Record> findByDateBetweenOrderByDate(LocalDate dtStart, LocalDate dtEnd);
+		
 }

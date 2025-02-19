@@ -5,12 +5,11 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum RecordType {
-
-    INCOME(0),
-    ONE_TIME(1),
-    RECURRING(2);
-
-    private final Integer id;
+public enum RecordStatus {
+	
+	ACTIVE(1),
+	INACTIVE(0);
+	
+	private final Integer value;
 
 }

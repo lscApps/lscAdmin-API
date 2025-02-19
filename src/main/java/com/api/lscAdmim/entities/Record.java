@@ -46,6 +46,8 @@ public class Record implements Serializable{
     private Integer recurringCount;
     
     private Integer status; // 0 - INACTIVE // 1- ACTIVE
+    
+    private LocalDate created;
 
 
     public Record(RecordDTO dto){
@@ -58,6 +60,7 @@ public class Record implements Serializable{
         this.recurringType = dto.getRecurringType();
         this.recurringCount = dto.getRecurringCount();
         this.status = dto.getStatus();
+        this.created = LocalDate.parse(dto.getCreated(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
 }
