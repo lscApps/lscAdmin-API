@@ -10,9 +10,13 @@ import org.springframework.stereotype.Service;
 import com.api.lscAdmim.dtos.RecordDTO;
 import com.api.lscAdmim.entities.Record;
 import com.api.lscAdmim.enums.RecordStatus;
+import com.api.lscAdmim.enums.RecordType;
 import com.api.lscAdmim.repositories.RecordRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class RecordService {
 
 	private final RecordRepository repository;
@@ -20,6 +24,18 @@ public class RecordService {
 	@Autowired
 	public RecordService(RecordRepository repository) {
 		this.repository = repository;
+	}
+	
+	public void updateRecord(RecordDTO dto) {
+		try {
+			Record entity = repository.getReferenceById(dto.getId());
+			entity.updateValues(dto);			
+			repository.save(entity);
+		}catch (Exception e) {
+			log.error(String.format("Error updating record: %s", e.getMessage()));
+			throw e;
+		}
+
 	}
 
 	public List<RecordDTO> saveRecords(List<RecordDTO> newRecords) {
@@ -50,6 +66,12 @@ public class RecordService {
 		
 		
 		return repository.findByDateBetweenOrderByDate(initialMonth.atDay(1), endMonth.atEndOfMonth())
+				.stream().map(RecordDTO::new).toList();
+	}
+
+	public List<RecordDTO> getRecurrentRecords() {
+		
+		return repository.findByRecordTypeAndStatusOrderByRecordType(RecordType.RECURRING.getId(), RecordStatus.ACTIVE.getValue())
 				.stream().map(RecordDTO::new).toList();
 	}
 

@@ -14,11 +14,13 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class Record implements Serializable{
 	
 	private static final long serialVersionUID = 5301098313869652719L;
@@ -63,5 +65,18 @@ public class Record implements Serializable{
         this.status = dto.getStatus();
         this.created = LocalDate.parse(dto.getCreated(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
+
+
+	public void updateValues(RecordDTO dto) {
+        this.description = dto.getDescription();
+        this.amount = dto.getAmount();
+        this.date = LocalDate.parse(dto.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        this.departmentId = dto.getDepartmentId();
+        this.recordType = dto.getRecordType();
+        this.recurringType = dto.getRecurringType();
+        this.recurringCount = dto.getRecurringCount();
+        this.status = dto.getStatus();
+        this.created = LocalDate.parse(dto.getCreated(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	}
 
 }

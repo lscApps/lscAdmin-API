@@ -1,6 +1,5 @@
 package com.api.lscAdmim.controllers;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +32,12 @@ public class RecordController {
     public RecordController(RecordService recordService, ExcelService excelService) {
         this.recordService = recordService;
         this.excelService = excelService;
+    }
+    
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateRecords(@RequestBody RecordDTO record){
+    	recordService.updateRecord(record);
+        return ResponseEntity.noContent().build();
     }
     
     
@@ -68,8 +74,14 @@ public class RecordController {
     	
     }
     
+    @GetMapping(value = "/recurrents")
+    public ResponseEntity<List<RecordDTO>> getRecurrentRecords(){
+    	return ResponseEntity.ok(recordService.getRecurrentRecords());
+    }
+    
+    
     @PostMapping(value = "/excel", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<byte[]> exportExcel(@RequestBody List<RecordDTO> records) throws IOException{
+    public ResponseEntity<byte[]> exportExcel(@RequestBody List<RecordDTO> records) {
     	return ResponseEntity.ok()
     			.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=records.xlsx")
     			.contentType(MediaType.APPLICATION_OCTET_STREAM)
