@@ -34,6 +34,8 @@ public class RecordDTO implements Serializable {
     
     private int status; // 0 - INACTIVE // 1- ACTIVE
 
+    private String created;
+
 
     public RecordDTO(Record entity){
         this.id = entity.getId();
@@ -45,6 +47,7 @@ public class RecordDTO implements Serializable {
         this.recurringType = entity.getRecurringType();
         this.recurringCount = entity.getRecurringCount();
         this.status = entity.getStatus();
+        this.created = entity.getCreated().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
 }
