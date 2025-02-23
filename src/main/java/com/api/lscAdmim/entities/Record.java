@@ -40,7 +40,7 @@ public class Record implements Serializable{
 
     @Nonnull
     private Long departmentId;
-    
+
     @Nonnull
     private Integer recordType; // 0-INCOME // 1-ONE_TIME // 2-RECURRING
 
@@ -49,7 +49,7 @@ public class Record implements Serializable{
     private Integer recurringCount;
     
     private Integer status; // 0 - INACTIVE // 1- ACTIVE
-    
+
     private LocalDate created;
 
 

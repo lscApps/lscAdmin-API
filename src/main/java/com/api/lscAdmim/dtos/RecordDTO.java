@@ -33,7 +33,7 @@ public class RecordDTO implements Serializable {
     private int recurringCount;
     
     private int status; // 0 - INACTIVE // 1- ACTIVE
-    
+
     private String created;
 
 

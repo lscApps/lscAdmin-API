@@ -69,7 +69,6 @@ public class RecordService {
 	}
 
 	public List<RecordDTO> getRecurrentRecords() {
-
 		return repository.findByRecordTypeAndStatusOrderByRecordType(RecordType.RECURRENT.getId(),
 				RecordStatus.ACTIVE.getValue()).stream().map(RecordDTO::new).toList();
 	}
