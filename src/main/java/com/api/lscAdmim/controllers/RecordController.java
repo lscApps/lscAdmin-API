@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,9 @@ import com.api.lscAdmim.dtos.RecordDTO;
 import com.api.lscAdmim.services.ExcelService;
 import com.api.lscAdmim.services.RecordService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("record")
 public class RecordController {
@@ -85,7 +89,14 @@ public class RecordController {
     	return ResponseEntity.ok()
     			.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=records.xlsx")
     			.contentType(MediaType.APPLICATION_OCTET_STREAM)
-    			.body(excelService.generateExcel(records));
+    			.body(excelService.generateFile(records));
+    }
+    
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteRecord(@PathVariable("id") Long recordId){
+		recordService.deleteRecord(recordId);
+   		
+    	return ResponseEntity.noContent().build();
     }
 
 }

@@ -11,6 +11,7 @@ import com.api.lscAdmim.dtos.RecordDTO;
 import com.api.lscAdmim.entities.Record;
 import com.api.lscAdmim.enums.RecordStatus;
 import com.api.lscAdmim.enums.RecordType;
+import com.api.lscAdmim.exceptions.RecordNotFoundException;
 import com.api.lscAdmim.repositories.RecordRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class RecordService {
 			Record entity = repository.getReferenceById(dto.getId());
 			entity.updateValues(dto);
 			repository.save(entity);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			log.error(String.format("Error updating record: %s", e.getMessage()));
 			throw e;
 		}
@@ -50,29 +51,35 @@ public class RecordService {
 	public List<RecordDTO> getRecordsByMonth(Integer year, Integer month) {
 		YearMonth currentMonty = YearMonth.of(year, month);
 
-		return repository
-				.findByDateBetweenAndStatusOrderByDate(currentMonty.atDay(1), currentMonty.atEndOfMonth(), RecordStatus.ACTIVE.getValue())
-				.stream().map(RecordDTO::new).toList();
+		return repository.findByDateBetweenAndStatusOrderByDate(currentMonty.atDay(1), currentMonty.atEndOfMonth(),
+				RecordStatus.ACTIVE.getValue()).stream().map(RecordDTO::new).toList();
 	}
 
 	public List<RecordDTO> getRecordsInRange(LocalDate dtInit, LocalDate dtEnd) {
-		return repository.findByDateBetweenAndStatusOrderByDate(dtInit, dtEnd, RecordStatus.ACTIVE.getValue())
-				.stream().map(RecordDTO::new).toList();
+		return repository.findByDateBetweenAndStatusOrderByDate(dtInit, dtEnd, RecordStatus.ACTIVE.getValue()).stream()
+				.map(RecordDTO::new).toList();
 	}
 
 	public List<RecordDTO> getRecordsByYear(Integer year) {
 		YearMonth initialMonth = YearMonth.of(year, 1);
 		YearMonth endMonth = YearMonth.of(year, 12);
 
-
-		return repository.findByDateBetweenOrderByDate(initialMonth.atDay(1), endMonth.atEndOfMonth())
-				.stream().map(RecordDTO::new).toList();
+		return repository.findByDateBetweenOrderByDate(initialMonth.atDay(1), endMonth.atEndOfMonth()).stream()
+				.map(RecordDTO::new).toList();
 	}
 
 	public List<RecordDTO> getRecurrentRecords() {
+		return repository.findByRecordTypeAndStatusOrderByRecordType(RecordType.RECURRENT.getId(),
+				RecordStatus.ACTIVE.getValue()).stream().map(RecordDTO::new).toList();
+	}
 
-		return repository.findByRecordTypeAndStatusOrderByRecordType(RecordType.RECURRING.getId(), RecordStatus.ACTIVE.getValue())
-				.stream().map(RecordDTO::new).toList();
+	public void deleteRecord(Long recordId) {
+		repository.findById(recordId).ifPresentOrElse(entity -> {
+			repository.deleteById(recordId);
+		}, () -> {
+			throw new RecordNotFoundException(String.format("Record not found for ID: %d", recordId));
+		});
+
 	}
 
 }
