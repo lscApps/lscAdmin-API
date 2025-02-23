@@ -16,15 +16,19 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import com.api.lscAdmim.dtos.RecordDTO;
+import com.api.lscAdmim.enums.RecordStatus;
+import com.api.lscAdmim.enums.RecordType;
+import com.api.lscAdmim.enums.RecurringType;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+
 @Slf4j
-public class ExcelService {
+@Service
+public class ExcelService implements ExportService{
 	
-	
-	public byte[] generateExcel(List<RecordDTO> records) {		
+	@Override
+	public byte[] generateFile(List<RecordDTO> records) {		
 		try {		
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			Workbook wb = new XSSFWorkbook();
@@ -33,7 +37,7 @@ public class ExcelService {
 			
 			//Creating Headers
 			Row hr = sheet.createRow(0);
-			List<String> columns =Arrays.asList("Id", "Department", "Description", "Type", "Amount", "Date", "Recurring Type", 
+			List<String> columns =Arrays.asList("Id", "Type", "Department", "Description",  "Amount", "Date", "Recurring Type", 
 					"Installment Count",  "Creation Date", "Status");
 			
 			IntStream.range(0, columns.size())
@@ -50,15 +54,15 @@ public class ExcelService {
 					Row row = sheet.createRow(rowIndex);
 								
 					row.createCell(0).setCellValue(records.get(index).getId());
-					row.createCell(1).setCellValue(records.get(index).getDepartmentId());
-					row.createCell(2).setCellValue(records.get(index).getDescription());
-					row.createCell(3).setCellValue(records.get(index).getRecordType());
+					row.createCell(1).setCellValue(RecordType.getById(records.get(index).getRecordType()));
+					row.createCell(2).setCellValue(records.get(index).getDepartmentId());
+					row.createCell(3).setCellValue(records.get(index).getDescription());
 					row.createCell(4).setCellValue(records.get(index).getAmount());
 					row.createCell(5).setCellValue(records.get(index).getDate());
-					row.createCell(6).setCellValue(records.get(index).getRecurringType());
+					row.createCell(6).setCellValue(RecurringType.getById(records.get(index).getRecurringType()));
 					row.createCell(7).setCellValue(records.get(index).getRecurringCount());
 					row.createCell(8).setCellValue(records.get(index).getCreated());
-					row.createCell(9).setCellValue(records.get(index).getStatus());
+					row.createCell(9).setCellValue(RecordStatus.getById(records.get(index).getStatus()));
 					
 				});
 			
