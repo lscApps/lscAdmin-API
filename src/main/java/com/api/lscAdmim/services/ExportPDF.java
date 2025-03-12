@@ -3,13 +3,14 @@ package com.api.lscAdmim.services;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.api.lscAdmim.dtos.RecordDTO;
@@ -29,7 +30,7 @@ public class ExportPDF{
 	private static final String POSITIVE_FORMAT = " \u20AC%.2f";
 	private static final String NEGATIVE_FORMAT = "- \u20AC%.2f";
 	
-	private static final String TEMPLATE_PATH = "src/main/resources/templates/report-template.html";
+	private static final String TEMPLATE_PATH = "templates/report-template.html";
 	
 	
 	
@@ -44,7 +45,8 @@ public class ExportPDF{
 	public byte[] generateFile(List<RecordDTO> records, LocalDate dtInit, LocalDate dtEnd) {		
 		
 		try {
-			String htmlContent = new String(Files.readAllBytes(Paths.get(TEMPLATE_PATH)));
+			Path templatePath = new ClassPathResource(TEMPLATE_PATH).getFile().toPath();
+			String htmlContent = new String(Files.readAllBytes(templatePath));
 			
 			HashMap<String, String> sums = this.calculateBalance(records);
 			
