@@ -8,9 +8,12 @@ import com.api.lscAdmim.dtos.RecordDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,8 +41,9 @@ public class Record implements Serializable{
     @Nonnull
     private LocalDate date;
 
-    @Nonnull
-    private Long departmentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
 
     @Nonnull
     private Integer recordType; // 0-INCOME // 1-ONE_TIME // 2-RECURRING
@@ -53,12 +57,12 @@ public class Record implements Serializable{
     private LocalDate created;
 
 
-    public Record(RecordDTO dto){
+    public Record(RecordDTO dto, Department department){
         this.id = dto.getId();
         this.description = dto.getDescription();
         this.amount = dto.getAmount();
         this.date = LocalDate.parse(dto.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.departmentId = dto.getDepartmentId();
+        this.department = department;
         this.recordType = dto.getRecordType();
         this.recurringType = dto.getRecurringType();
         this.recurringCount = dto.getRecurringCount();
@@ -67,11 +71,11 @@ public class Record implements Serializable{
     }
 
 
-	public void updateValues(RecordDTO dto) {
+	public void updateValues(RecordDTO dto, Department department) {
         this.description = dto.getDescription();
         this.amount = dto.getAmount();
         this.date = LocalDate.parse(dto.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.departmentId = dto.getDepartmentId();
+        this.department = department;
         this.recordType = dto.getRecordType();
         this.recurringType = dto.getRecurringType();
         this.recurringCount = dto.getRecurringCount();
