@@ -1,14 +1,18 @@
 package com.api.lscAdmim.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.api.lscAdmim.dtos.DepartmentDTO;
 
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +36,9 @@ public class Department implements Serializable{
 	
 	@Nonnull
 	private String manager;
+	
+	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Record> records = new ArrayList<>();
 	
 	
 	public Department(DepartmentDTO dto) {

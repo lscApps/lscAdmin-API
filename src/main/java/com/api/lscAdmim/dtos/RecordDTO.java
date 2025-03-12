@@ -42,7 +42,7 @@ public class RecordDTO implements Serializable {
         this.description = entity.getDescription();
         this.amount = entity.getAmount();
         this.date =entity.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.departmentId = entity.getDepartmentId();
+        this.departmentId = entity.getDepartment().getId();
         this.recordType = entity.getRecordType();
         this.recurringType = entity.getRecurringType();
         this.recurringCount = entity.getRecurringCount();

@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.lscAdmim.dtos.RecordDTO;
+import com.api.lscAdmim.dtos.RequestPdfDTO;
+import com.api.lscAdmim.dtos.ResponseReportDTO;
 import com.api.lscAdmim.services.ExcelService;
+import com.api.lscAdmim.services.ExportPDF;
 import com.api.lscAdmim.services.RecordService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +34,13 @@ public class RecordController {
 
     private final RecordService recordService;
     private final ExcelService excelService;
+    private final ExportPDF pdfService;
 
     @Autowired
-    public RecordController(RecordService recordService, ExcelService excelService) {
+    public RecordController(RecordService recordService, ExcelService excelService, ExportPDF pdfService) {
         this.recordService = recordService;
         this.excelService = excelService;
+        this.pdfService = pdfService;
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -56,7 +61,7 @@ public class RecordController {
     }
     
     @GetMapping(value = "/{year}/{month}")
-    public ResponseEntity<List<RecordDTO>> getRecordsByMonth(@PathVariable("month") Integer monthId,
+    public ResponseEntity<ResponseReportDTO> getRecordsByMonth(@PathVariable("month") Integer monthId,
     		@PathVariable("year") Integer yearId){
     	
     	return ResponseEntity.ok(recordService.getRecordsByMonth(yearId, (monthId+1)));
@@ -64,14 +69,14 @@ public class RecordController {
     }
 
     @GetMapping(value = "/{year}")
-    public ResponseEntity<List<RecordDTO>> getRecordsByYear(@PathVariable("year") Integer yearId){
+    public ResponseEntity<ResponseReportDTO> getRecordsByYear(@PathVariable("year") Integer yearId){
 
     	return ResponseEntity.ok(recordService.getRecordsByYear(yearId));
 
     }
 
     @GetMapping
-    public ResponseEntity<List<RecordDTO>> gerRecords(@RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dtInit,
+    public ResponseEntity<ResponseReportDTO> gerRecords(@RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dtInit,
     		@RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dtEnd){
 
     	return ResponseEntity.ok(recordService.getRecordsInRange(dtInit, dtEnd));
@@ -90,6 +95,14 @@ public class RecordController {
     			.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=records.xlsx")
     			.contentType(MediaType.APPLICATION_OCTET_STREAM)
     			.body(excelService.generateFile(records));
+    }
+    
+    @PostMapping(value = "/pdf", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> exportPDF(@RequestBody RequestPdfDTO requestDto) {
+    	return ResponseEntity.ok()
+    			.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=records_report.pdf")
+    			.contentType(MediaType.APPLICATION_OCTET_STREAM)
+    			.body(pdfService.generateFile(requestDto.getRecords(), requestDto.getDtInit(), requestDto.getDtEnd()));
     }
     
     @DeleteMapping(value = "/{id}")

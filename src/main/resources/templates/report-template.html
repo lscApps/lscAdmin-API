@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Report</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid black;
+	padding: 8px;
+	text-align: left;
+}
+
+th {
+	background-color: gray;
+	color: white;
+}
+
+.title {
+	color: navy;
+	text-align: left;
+	margin-bottom: 0;
+}
+
+.subTile {
+	font-weight: bold;
+	font-style: italic;
+	margin: 0;
+}
+
+.email {
+	font-style: italic;
+	margin: 0;
+	color: navy;
+	font-family: verdana;
+}
+
+.negative {
+	color: #FF0000;
+}
+
+.positive {
+	color: #0066CC;
+}
+
+.amountIn{
+	color: #008000;
+}
+
+.amountOut{
+	color: #FF0000;
+}
+
+.tar {
+	text-align: right;
+}
+
+.tac {
+	text-align: center;
+}
+
+.m0 {
+	margin: 0;
+}
+
+.mb0 {
+	margin-bottom: 0;
+}
+
+.mb5 {
+	margin-bottom: 5px;
+}
+
+.summary {
+	border-top: 2px solid #2c3e50;
+	padding-top: 10px;
+	font-size: 14pt;
+	text-align: right;
+}
+</style>
+</head>
+<body>
+	<div>
+		<h1 class="title">Life &amp; Spirit Church</h1>
+		<p class="subTile">Registration Number:659955</p>
+	</div>
+	<p class="m0">13 Unit Lakeside Retail Park, Ballindine Road,
+		Claremorris Co.</p>
+	<p class="email">lifeandspiritchurch@hotmail.com</p>
+	<p class="mb5 tar">
+		Period: <b>{{dateInit}}</b> - <b>{{dateEnd}}</b>
+	</p>
+	<table>
+		<thead>
+			<tr>
+				<th class="tac">Date</th>
+				<th>Description</th>
+				<th class="tac">Department</th>
+				<th class="tac">Amount</th>
+			</tr>
+		</thead>
+		<tbody>{{table_rows}}
+		</tbody>
+	</table>
+
+	<br/>
+	<table>
+		<thead>
+			<tr>
+				<th class="tac">Incomes</th>
+				<th class="tac">Expenses</th>
+				<th class="tac">Balance</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="tac"><span class="amountIn">{{total_income}}</span></td>
+				<td class="tac"><span class="amountOut">{{total_expenses}}</span></td>
+				<td class="tac"><span class="{{BALANCE_CLASS}}"><b>{{balance}}</b></span></td>
+			</tr>
+		</tbody>
+	</table>
+
+
+</body>
+</html>

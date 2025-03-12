@@ -19,9 +19,12 @@ public class DepartmentService {
 
 	private final DepartmentRepository repo;
 
+	private final List<Department> departmentList;
+	
 	@Autowired
 	public DepartmentService(DepartmentRepository repo) {
 		this.repo = repo;
+		this.departmentList = repo.findAll();
 	}
 
 	public DepartmentDTO save(DepartmentDTO newDepartment) {
@@ -72,6 +75,11 @@ public class DepartmentService {
 			throw new LscAdminServiceException(message);			
 		}
 		
+	}
+	
+	public Department getEntityById(Long id) {
+		return this.departmentList.stream().filter(dep -> dep.getId() == id).findFirst()
+				.orElseThrow(() -> new EntityNotFoundException(String.format("Department not found with id: %d", id)));
 	}
 
 }
