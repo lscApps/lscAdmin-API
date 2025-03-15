@@ -12,20 +12,27 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class CorsFilter implements Filter {
 	
 	@Value("${lscAdmin.allowed.origins}")
-	private String alloweOrigins;
+	private String allowedOrigins;
 	
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
+    	
+    	log.info(String.format("AllowedOrigins in CorsFilter: %s", allowedOrigins));
+    	
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
+        
+        
 
-        response.setHeader("Access-Control-Allow-Origin", alloweOrigins);
+        response.setHeader("Access-Control-Allow-Origin", allowedOrigins);
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         response.setHeader("Vary", "Origin");
 
