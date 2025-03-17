@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +20,9 @@ public class UserDTO {
 	private String username;
 	private String password;	
 	private List<String> roles;
+
+	@Setter
+	private String token;
 	
 	public UserDTO(User entity) {
 		this.id = entity.getId();
