@@ -28,7 +28,7 @@ public class RecordDTO implements Serializable {
 
     private int recordType; // 0-INCOME // 1-ONE_TIME // 2-RECURRING
 
-    private int recurringType; // 0-FIXED // 1-INSTALLMENT
+    private int recurringType; //0-"N/A" //1-FIXED // 2-INSTALLMENT
 
     private int recurringCount;
     
