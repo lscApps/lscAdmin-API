@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.api</groupId>
-	<artifactId>lscAdmim</artifactId>
+	<artifactId>lscAdmin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lscAdmim</name>
+	<name>lscAdmin</name>
 	<description>API to persist data from lscAdmin-fs into database</description>
 	<url />
 	<licenses>
