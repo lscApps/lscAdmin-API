@@ -66,13 +66,14 @@ public class ExportPDF{
 			return convertHtmlToPdf(filledHtml);
 			
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new LscAdminServiceException(String.format("Error generating PDF report: %s", e.getMessage()));
+			String msg = String.format("Error generating PDF report: %s", e.getMessage());
+			log.error(msg);
+			throw new LscAdminServiceException(msg);
 		}		
 	}
 	
 	private String getAmountFormatted(RecordDTO dto) {
-		return String.format(dto.getRecordType() > 0 ? POSITIVE_FORMAT : NEGATIVE_FORMAT, dto.getAmount());
+		return String.format(dto.getRecordType() > 0 ? NEGATIVE_FORMAT : POSITIVE_FORMAT, dto.getAmount());
 	}
 	
 	private HashMap<String, String> calculateBalance(List<RecordDTO> records) {

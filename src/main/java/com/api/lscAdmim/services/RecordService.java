@@ -40,7 +40,7 @@ public class RecordService {
 			entity.updateValues(dto, this.depService.getEntityById(dto.getDepartmentId()));
 			repository.save(entity);
 		} catch (Exception e) {
-			log.error(String.format("Error updating record: %s", e.getMessage()));
+			log.error("Error updating record: {}", e.getMessage());
 			throw e;
 		}
 
